@@ -4,7 +4,7 @@ echo -e "\E[44;1;37m     INSTALACAO BOT SSH TESTE     \E[0m"
 echo -e "\nINSTALANDO AGUARDE...."
 apt update -y > /dev/null 2>&1 && apt install unzip at jq curl -y > /dev/null 2>&1
 mkdir $HOME/BOT
-cd $HOME/BOT && wget docs.google.com/uc?export=download&id=1poMOFXTQrbdLSFDNW4FBavMu6OYNm1ry
+cd $HOME/BOT && wget www.dropbox.com/s/3vr186z7rfcqn59/botteste.zip?dl=1
 unzip botteste.zip > /dev/null 2>&1 && rm botteste.zip > /dev/null 2>&1
 chmod +x $(ls)
 mv botteste /bin/botteste
