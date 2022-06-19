@@ -1,0 +1,118 @@
+#!/bin/bash
+clear
+#--------[ EDITADO POR @LSVPN ]-----------#
+source ShellBot.sh
+touch lista
+[[ -z $1 ]] && {
+    clear && echo "INFORME O TOKEN" && return 0
+}
+# Informações Server 2
+ip_server2="45.162.230.112"
+senha_server2="v8u7z2m2"
+[[ ! -e RESET ]] && touch RESET
+api_bot=$1
+ShellBot.init --token "$api_bot" --monitor --flush
+ShellBot.username
+
+# - Funcao menu
+menu() {
+    local msg
+        msg="▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬\n"
+        msg+="✌️😃 Ola <b>${message_from_first_name[$id]}</b>, Bem vindo!\n"
+        msg+="▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬\n"
+        msg+="<b>GERE SEU TESTE DE 1 HORAS GRÁTIS</b>\n"
+        msg+="▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬\n"
+        msg+="<b>🔴CLARO 🟣VIVO 🔵TIM 🟡Oi</b>\n"
+        ShellBot.sendMessage --chat_id ${message_chat_id[$id]} \
+        --text "$(echo -e $msg)" \
+        --reply_markup "$keyboard1" \
+        --parse_mode html
+        return 0
+}
+
+# - Funcao pix
+PIX() {
+    local msg
+        msg="▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬\n"
+        msg+="💠      ESCOLHA ABAIXO UMA CHAVE.     💠\n"
+        msg+="▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬\n"
+        msg+="🔁                 CHAVE EMAIL                   🔁\n"
+        msg+="🔑 ├ testenetssh@outlook.com\n"
+        msg+="👤 ├ LSVPN X\n"
+        msg+="💰 └ R$ 20,00\n"
+        msg+="▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬\n"
+        msg+="✅           CONFIRMAR PAGAMENTO           ✅\n"
+        msg+="ENVIE O COMPROVANTE P/ @LSVPN\n"
+        msg+="▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬\n"
+        msg+="VERIFICAÇÃO DE PAGAMENTO EM ATÉ 24H\n"
+        ShellBot.sendMessage --chat_id ${message_chat_id[$id]} \
+        --text "$(echo -e $msg)" \
+        --reply_markup "$keyboard1" \
+        --parse_mode html
+        return 0
+}
+
+# - funcao criar ssh
+criarteste() {
+    [[ $(grep -wc ${callback_query_from_id} lista) != '0' ]] && {
+      ShellBot.sendMessage --chat_id ${callback_query_message_chat_id} \
+        --text "❌ Acesso negado, verifique o horário da sua última criação, e volte apenas quando completar 24 horas da sua última criação."
+      return 0
+    }
+    usuario=$(echo PBxyx$(( RANDOM% + 999 )))
+    senha=$((RANDOM% + 99999))
+    limite='1'
+    tempo='1'
+    tuserdate=$(date '+%C%y/%m/%d' -d " +1 days")
+    useradd -M -N -s /bin/false $usuario -e $tuserdate > /dev/null 2>&1
+    (echo "$senha";echo "$senha") | passwd $usuario > /dev/null 2>&1
+    echo "$senha" > /etc/SSHPlus/senha/$usuario
+    echo "$usuario $limite" >> /root/usuarios.db
+    echo "#!/bin/bash
+pkill -f "$usuario"
+userdel --force $usuario
+grep -v ^$usuario[[:space:]] /root/usuarios.db > /tmp/ph ; cat /tmp/ph > /root/usuarios.db
+rm /etc/SSHPlus/senha/$usuario > /dev/null 2>&1
+rm -rf /etc/SSHPlus/userteste/$usuario.sh" > /etc/SSHPlus/userteste/$usuario.sh
+    chmod +x /etc/SSHPlus/userteste/$usuario.sh
+    at -f /etc/SSHPlus/userteste/$usuario.sh now + $tempo hour > /dev/null 2>&1
+    echo ${callback_query_from_id} >> lista
+    # - ENVIA O SSH
+    ShellBot.sendMessage --chat_id ${callback_query_message_chat_id} \
+    --text "$(echo -e "▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬\n        ✅ Criado com sucesso ✅\n▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬\n            👤 USUARIO: <code>$usuario</code>\n               🔑 SENHA: <code>$senha</code>\n             ⏰ Expira em: $tempo Hora")\n▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬\n   ℹ️ COMO CONECTAR A INTERNET\n▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬\n• Abra o app que você instalou.\n• Selecione sua operadora na seta vermelha.\n• Digite o usuário e a senha recebida no app.\n• Ligue dados móveis e Desligue Wi-fi\n• Clique em Conectar.\n• Deve aparecer Conexão Estabelecida.\n• Se apareceu, va ao youtube e faça o teste.\n▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬\n   ⚠️ SIGA EXATAMENTE COMO DIZ\n▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬\n  😍 GOSTOU? DIGITE OU CLIQUE EM /PIX" \
+    --parse_mode html
+    return 0
+}
+
+#informacoes usuario
+infouser () {
+	ShellBot.sendMessage --chat_id ${message_chat_id[$id]} \
+	--text "$(echo -e "Nome:  ${message_from_first_name[$(ShellBot.ListUpdates)]}\nUser: @${message_from_username[$(ShellBot.ListUpdates)]:-null}")\nID: ${message_from_id[$(ShellBot.ListUpdates)]} " \
+	--parse_mode html
+	return 0
+}
+
+unset botao1
+botao1=''
+ShellBot.InlineKeyboardButton --button 'botao1' --line 1 --text '♻️ GERAR LOGIN DE 1h ♻️' --callback_data 'gerarssh'
+ShellBot.InlineKeyboardButton --button 'botao1' --line 2 --text '📥 Aplicativo MediaFire 📥' --callback_data '2' --url 'https://www.mediafire.com/file/n8lfkrh31lkpeq2/LSVPN.apk/file' # LINK APP
+ShellBot.InlineKeyboardButton --button 'botao1' --line 3 --text '🤑 SEJA REVENDEDOR 🤑️' --callback_data '2' --url 't.me/LSVPN' # LINK PV
+ShellBot.InlineKeyboardButton --button 'botao1' --line 4 --text '🏷️ ENVIAR COMPROVANTE 🏷️️' --callback_data '2' --url 't.me/LSVPN' # LINK PV
+ShellBot.regHandleFunction --function criarteste --callback_data gerarssh
+unset keyboard1
+keyboard1="$(ShellBot.InlineKeyboardMarkup -b 'botao1')"
+while :; do
+   [[ "$(date +%d)" != "$(cat RESET)" ]] && {
+   	echo $(date +%d) > RESET
+   	echo ' ' > lista
+   }
+  ShellBot.getUpdates --limit 100 --offset $(ShellBot.OffsetNext) --timeout 30
+  for id in $(ShellBot.ListUpdates); do
+    (
+      ShellBot.watchHandle --callback_data ${callback_query_data[$id]}
+      comando=(${message_text[$id]})
+      [[ "${comando[0]}" = "/menu"  || "${comando[0]}" = "/start" ]] && menu
+      [[ "${comando[0]}" = "/PIX"  ]] && pix
+    ) &
+  done
+done
