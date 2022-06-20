@@ -8,5 +8,5 @@ cd $HOME/BOT && wget https://www.dropbox.com/s/rhhxv6pgntfwx7o/botteste.zip?dl=0
 unzip botteste.zip > /dev/null 2>&1 && rm botteste.zip > /dev/null 2>&1
 chmod +x $(ls)
 mv botteste /bin/botteste
-clear && echo -e "INSTALADO COM SUCESSO !\nPARA ATIVAR EXECULTE O COMANDO botteste"
+clear && echo -e "INSTALADO COM SUCESSO !\nPARA ATIVAR EXECUTE O COMANDO botteste"
 cd $HOME && rm inst-botteste > /dev/null 2>&1
